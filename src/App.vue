@@ -1,7 +1,10 @@
 <template>
     <div class="container">
         <SearchBar @termChange="onTermChange"></SearchBar>
-        <VideoList v-bind:videos="videos"></VideoList>
+      <div class="row">
+        <videoDetail v-bind:video="selectedVideo"> </videoDetail>
+        <VideoList @videoSelect="onVideoSelect" v-bind:videos="videos"></VideoList>
+      </div>
     </div>
 </template>
 
@@ -9,6 +12,7 @@
 import axios from 'axios'; //import axios library
 import SearchBar from './components/SearchBar'; //import searchbar component
 import VideoList from './components/VideoList'; //import videoList component
+import videoDetail from "./components/VideoDetail"; //import videoDetail component
 
 // eslint-disable-next-line no-unused-vars
 const API_KEY = 'AIzaSyC6fMOxJO_Wlz1Fb7Vl-dL9fahV8EF4E3k'; //create new variable for API key
@@ -16,12 +20,14 @@ export default { //declaring a component which can be registered and reused late
   name: 'App', //name of component
   components: { //list of all components used in this component
     VideoList,
-    SearchBar
+    SearchBar,
+    videoDetail
   },
 
   data() { //function to return data object
     return {
       videos: [], //list of videos
+      selectedVideo: null
     };
   },
 
@@ -39,6 +45,10 @@ export default { //declaring a component which can be registered and reused late
       }).then(response => {
         this.videos = response.data.items;//update videos list based on search
       });
+    },
+    // receive video as argument
+    onVideoSelect (video) {
+      this.selectedVideo = video;
     }
   }
 }
